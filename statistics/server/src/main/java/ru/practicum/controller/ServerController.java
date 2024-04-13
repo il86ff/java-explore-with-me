@@ -35,7 +35,7 @@ public class ServerController {
                                                         @RequestParam(required = false) List<String> uris,
                                                         @RequestParam(defaultValue = "false") Boolean unique) {
 
-        LocalDateTime startDT;
+        /*LocalDateTime startDT;
         LocalDateTime endDT;
         try {
             startDT = LocalDateTime.parse(start, DTF);
@@ -45,6 +45,7 @@ public class ServerController {
         }
 
         List<RequestOutDTO> results = statService.getRequestsWithViews(startDT, endDT, uris, unique);
-        return ResponseEntity.ok().body(results);
+        return ResponseEntity.ok().body(results);*/
+        return statService.getRequestsWithViewsNEW(start, end, uris, unique);
     }
 }

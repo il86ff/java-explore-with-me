@@ -1,6 +1,7 @@
 package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.RequestDTO;
 import ru.practicum.RequestOutDTO;
@@ -10,7 +11,10 @@ import ru.practicum.model.Request;
 import ru.practicum.repository.ApplicationRepository;
 import ru.practicum.repository.RequestRepository;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +25,9 @@ public class StatService {
     private final ApplicationRepository appRepository;
     private final StatMapper mapper;
 
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @Transactional
     public void addRequest(RequestDTO requestDto) {
         Optional<Application> optionalApp = appRepository.findByName(requestDto.getApp());
 
@@ -31,6 +38,7 @@ public class StatService {
         requestRepository.save(request);
     }
 
+    @Transactional(readOnly = true)
     public List<RequestOutDTO> getRequestsWithViews(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
 
         if (unique) {
@@ -43,6 +51,31 @@ public class StatService {
                 return requestRepository.getAllRequestsWithoutUri(start, end);
             }
             return requestRepository.getAllRequestsWithUri(start, end, uris);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity getRequestsWithViewsNEW(String start, String end, List<String> uris, Boolean unique) {
+
+        LocalDateTime startDT;
+        LocalDateTime endDT;
+        try {
+            startDT = LocalDateTime.parse(start, DTF);
+            endDT = LocalDateTime.parse(end, DTF);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (unique) {
+            if (uris == null || uris.isEmpty()) {
+                return ResponseEntity.ok().body(requestRepository.getUniqueIpRequestsWithoutUri(startDT, endDT));
+            }
+            return ResponseEntity.ok().body(requestRepository.getUniqueIpRequestsWithUri(startDT, endDT, uris));
+        } else {
+            if (uris == null || uris.isEmpty()) {
+                return ResponseEntity.ok().body(requestRepository.getAllRequestsWithoutUri(startDT, endDT));
+            }
+            return ResponseEntity.ok().body(requestRepository.getAllRequestsWithUri(startDT, endDT, uris));
         }
     }
 }

@@ -1,6 +1,6 @@
 package ru.practicum.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -8,7 +8,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "requests")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
