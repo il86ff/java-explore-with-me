@@ -3,6 +3,7 @@ package ru.practicum.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.RequestDTO;
 import ru.practicum.RequestOutDTO;
 import ru.practicum.mapper.StatMapper;
@@ -11,7 +12,6 @@ import ru.practicum.model.Request;
 import ru.practicum.repository.ApplicationRepository;
 import ru.practicum.repository.RequestRepository;
 
-import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -21,11 +21,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class StatService {
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final RequestRepository requestRepository;
     private final ApplicationRepository appRepository;
     private final StatMapper mapper;
-
-    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Transactional
     public void addRequest(RequestDTO requestDto) {
