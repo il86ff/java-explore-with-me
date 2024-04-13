@@ -38,23 +38,7 @@ public class StatService {
     }
 
     @Transactional(readOnly = true)
-    public List<RequestOutDTO> getRequestsWithViews(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-
-        if (unique) {
-            if (uris == null || uris.isEmpty()) {
-                return requestRepository.getUniqueIpRequestsWithoutUri(start, end);
-            }
-            return requestRepository.getUniqueIpRequestsWithUri(start, end, uris);
-        } else {
-            if (uris == null || uris.isEmpty()) {
-                return requestRepository.getAllRequestsWithoutUri(start, end);
-            }
-            return requestRepository.getAllRequestsWithUri(start, end, uris);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public ResponseEntity getRequestsWithViewsNEW(String start, String end, List<String> uris, Boolean unique) {
+    public ResponseEntity<List<RequestOutDTO>> getRequestsWithViews(String start, String end, List<String> uris, Boolean unique) {
 
         LocalDateTime startDT;
         LocalDateTime endDT;

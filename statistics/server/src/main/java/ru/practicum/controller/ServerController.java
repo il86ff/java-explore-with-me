@@ -33,17 +33,6 @@ public class ServerController {
                                                         @RequestParam(required = false) List<String> uris,
                                                         @RequestParam(defaultValue = "false") Boolean unique) {
 
-        /*LocalDateTime startDT;
-        LocalDateTime endDT;
-        try {
-            startDT = LocalDateTime.parse(start, DTF);
-            endDT = LocalDateTime.parse(end, DTF);
-        } catch (DateTimeParseException e) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        List<RequestOutDTO> results = statService.getRequestsWithViews(startDT, endDT, uris, unique);
-        return ResponseEntity.ok().body(results);*/
-        return statService.getRequestsWithViewsNEW(start, end, uris, unique);
+        return statService.getRequestsWithViews(start, end, uris, unique);
     }
 }
