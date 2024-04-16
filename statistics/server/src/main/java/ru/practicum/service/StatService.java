@@ -61,4 +61,28 @@ public class StatService {
             return ResponseEntity.ok().body(requestRepository.getAllRequestsWithUri(startDT, endDT, uris));
         }
     }
+
+    public ResponseEntity<List<RequestOutDTO>> getRequestsWithViewsByIp(String start, String end, List<String> uris, Boolean unique, String ip) {
+
+        LocalDateTime startDT;
+        LocalDateTime endDT;
+        try {
+            startDT = LocalDateTime.parse(start, DTF);
+            endDT = LocalDateTime.parse(end, DTF);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (unique) {
+            if (uris == null || uris.isEmpty()) {
+                return ResponseEntity.ok().body(requestRepository.getUniqueIpRequestsWithoutUriByIp(startDT, endDT, ip));
+            }
+            return ResponseEntity.ok().body(requestRepository.getUniqueIpRequestsWithUriByIp(startDT, endDT, uris, ip));
+        } else {
+            if (uris == null || uris.isEmpty()) {
+                return ResponseEntity.ok().body(requestRepository.getAllRequestsWithoutUriByIp(startDT, endDT, ip));
+            }
+            return ResponseEntity.ok().body(requestRepository.getAllRequestsWithUriByIp(startDT, endDT, uris, ip));
+        }
+    }
 }

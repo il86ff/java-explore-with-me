@@ -35,4 +35,14 @@ public class ServerController {
 
         return statService.getRequestsWithViews(start, end, uris, unique);
     }
+
+    @GetMapping("/statsByIp")
+    public ResponseEntity<List<RequestOutDTO>> statsByIp(@RequestParam String start,
+                                                         @RequestParam String end,
+                                                         @RequestParam(required = false) List<String> uris,
+                                                         @RequestParam(defaultValue = "false") Boolean unique,
+                                                         @RequestParam String ip) {
+
+        return statService.getRequestsWithViewsByIp(start, end, uris, unique, ip);
+    }
 }

@@ -45,4 +45,42 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
             "GROUP BY a.name, r.uri " +
             "ORDER BY COUNT(r.ip) DESC ")
     List<RequestOutDTO> getAllRequestsWithoutUri(LocalDateTime start, LocalDateTime end);
+
+    @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(r.ip)) " +
+            "FROM Request as r " +
+            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "WHERE r.timestamp between ?1 AND ?2 " +
+            "AND r.uri IN (?3) " +
+            "AND r.ip = ?4 " +
+            "GROUP BY a.name, r.uri " +
+            "ORDER BY COUNT(r.ip) DESC ")
+    List<RequestOutDTO> getAllRequestsWithUriByIp(LocalDateTime start, LocalDateTime end, List<String> uris, String ip);
+
+    @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(DISTINCT r.ip)) " +
+            "FROM Request as r " +
+            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "WHERE r.timestamp between ?1 AND ?2 " +
+            "AND r.uri IN (?3) " +
+            "AND r.ip = ?4 " +
+            "GROUP BY a.name, r.uri " +
+            "ORDER BY COUNT(DISTINCT r.ip) DESC ")
+    List<RequestOutDTO> getUniqueIpRequestsWithUriByIp(LocalDateTime start, LocalDateTime end, List<String> uris, String ip);
+
+    @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(DISTINCT r.ip)) " +
+            "FROM Request as r " +
+            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "WHERE r.timestamp between ?1 AND ?2 " +
+            "AND r.ip = ?3 " +
+            "GROUP BY a.name, r.uri " +
+            "ORDER BY COUNT(DISTINCT r.ip) DESC ")
+    List<RequestOutDTO> getUniqueIpRequestsWithoutUriByIp(LocalDateTime start, LocalDateTime end, String ip);
+
+    @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(r.ip)) " +
+            "FROM Request as r " +
+            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "WHERE r.timestamp between ?1 AND ?2 " +
+            "AND r.ip = ?3 " +
+            "GROUP BY a.name, r.uri " +
+            "ORDER BY COUNT(r.ip) DESC ")
+    List<RequestOutDTO> getAllRequestsWithoutUriByIp(LocalDateTime start, LocalDateTime end, String ip);
 }
