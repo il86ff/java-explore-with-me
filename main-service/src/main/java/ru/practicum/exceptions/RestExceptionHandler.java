@@ -27,4 +27,12 @@ public class RestExceptionHandler {
         log.error(e.getMessage());
         return new ApiError(HttpStatus.CONFLICT.toString(), reason, e.getMessage(), LocalDateTime.now());
     }
+
+    @ExceptionHandler(IncorrectRequestException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ApiError exceptionBadRequest(RuntimeException e) {
+        String reason = "Incorrectly made request.";
+        log.error(e.getMessage());
+        return new ApiError(HttpStatus.BAD_REQUEST.toString(), reason, e.getMessage(), LocalDateTime.now());
+    }
 }
