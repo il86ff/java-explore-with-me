@@ -48,7 +48,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(r.ip)) " +
             "FROM Request as r " +
-            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "LEFT JOIN Application as a ON a.id = r.app.id " +
             "WHERE r.timestamp between ?1 AND ?2 " +
             "AND r.uri IN (?3) " +
             "AND r.ip = ?4 " +
@@ -58,7 +58,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(DISTINCT r.ip)) " +
             "FROM Request as r " +
-            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "LEFT JOIN Application as a ON a.id = r.app.id " +
             "WHERE r.timestamp between ?1 AND ?2 " +
             "AND r.uri IN (?3) " +
             "AND r.ip = ?4 " +
@@ -68,7 +68,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(DISTINCT r.ip)) " +
             "FROM Request as r " +
-            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "LEFT JOIN Application as a ON a.id = r.app.id " +
             "WHERE r.timestamp between ?1 AND ?2 " +
             "AND r.ip = ?3 " +
             "GROUP BY a.name, r.uri " +
@@ -77,7 +77,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     @Query(value = "SELECT new ru.practicum.RequestOutDTO(a.name, r.uri, COUNT(r.ip)) " +
             "FROM Request as r " +
-            "LEFT JOIN App as a ON a.id = r.app.id " +
+            "LEFT JOIN Application as a ON a.id = r.app.id " +
             "WHERE r.timestamp between ?1 AND ?2 " +
             "AND r.ip = ?3 " +
             "GROUP BY a.name, r.uri " +
