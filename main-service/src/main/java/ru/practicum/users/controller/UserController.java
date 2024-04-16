@@ -53,14 +53,14 @@ public class UserController {
                                             @PathVariable @NotNull Long eventId,
                                             @RequestBody @Valid EventUpdateDTO eventDto) {
 
-        log.info("Calling PATCH: /users/{userId}/events/{eventId} with 'userId': {}, 'eventId': {}", userId, eventId);
+        log.info("Calling updateUserEventById: /users/{userId}/events/{eventId} with 'userId': {}, 'eventId': {}", userId, eventId);
         return eventService.updateUserEventById(userId, eventId, eventDto);
     }
 
     @GetMapping("/requests")
     public List<ParticipationRequestDTO> getUserRequests(@PathVariable Long userId) {
 
-        log.info("Calling GET: /users/{userId}/requests with 'userId': {}", userId);
+        log.info("Calling getUserRequests: /users/{userId}/requests with 'userId': {}", userId);
         return requestService.getUserRequests(userId);
     }
 
@@ -69,7 +69,7 @@ public class UserController {
     public ParticipationRequestDTO addUserRequest(@PathVariable Long userId,
                                                   @RequestParam(name = "eventId") Long eventId) {
 
-        log.info("Calling POST: /users/{userId}/requests with 'userId': {}, 'eventId': {}", userId, eventId);
+        log.info("Calling addUserRequest: /users/{userId}/requests with 'userId': {}, 'eventId': {}", userId, eventId);
         return requestService.addParticipationRequest(userId, eventId);
     }
 
@@ -77,7 +77,7 @@ public class UserController {
     public ParticipationRequestDTO updateUserRequest(@PathVariable Long userId,
                                                      @PathVariable Long requestId) {
 
-        log.info("Calling PATCH: /users/{userId}/requests/{requestId}/cancel with 'userId': {}, 'requestId': {}", userId, requestId);
+        log.info("Calling updateUserRequest: /users/{userId}/requests/{requestId}/cancel with 'userId': {}, 'requestId': {}", userId, requestId);
         return requestService.cancelParticipationRequest(userId, requestId);
     }
 
@@ -85,7 +85,7 @@ public class UserController {
     public List<ParticipationRequestDTO> getUserEventsRequests(@PathVariable Long userId,
                                                                @PathVariable Long eventId) {
 
-        log.info("Calling GET: /users/{userId}/events/{eventId}/requests with 'userId': {}, 'eventId': {}", userId, eventId);
+        log.info("Calling getUserEventsRequests: /users/{userId}/events/{eventId}/requests with 'userId': {}, 'eventId': {}", userId, eventId);
         return requestService.getUserEventRequests(userId, eventId);
     }
 
@@ -94,7 +94,7 @@ public class UserController {
                                                                   @PathVariable Long eventId,
                                                                   @RequestBody EventRequestStatusUpdateRequest requestsUpdate) {
 
-        log.info("Calling PATCH: /users/{userId}/events/{eventId}/requests with 'userId': {}, " +
+        log.info("Calling updateUserEventRequests: /users/{userId}/events/{eventId}/requests with 'userId': {}, " +
                 "'eventId': {}, 'requestsUpdate': {}", userId, eventId, requestsUpdate);
         return requestService.updateEventRequests(userId, eventId, requestsUpdate);
     }
