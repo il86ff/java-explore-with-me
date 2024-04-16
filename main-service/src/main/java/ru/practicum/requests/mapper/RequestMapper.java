@@ -1,6 +1,5 @@
 package ru.practicum.requests.mapper;
 
-import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ru.practicum.requests.dto.ParticipationRequestDTO;
