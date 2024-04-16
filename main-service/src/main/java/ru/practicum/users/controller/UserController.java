@@ -14,7 +14,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Validated
 @RestController
 @RequestMapping("/users/{userId}")
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class UserController {
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDTO addUserEvent(@PathVariable Long userId,
-                                     @RequestBody @Valid NewEventDTO event) {
+                                     @Valid @RequestBody NewEventDTO event) {
 
         log.info("Calling addUserEvent: /users/{userId}/events with 'userId': {}, 'event': {}", userId, event);
         return eventService.addUserEvent(userId, event);
