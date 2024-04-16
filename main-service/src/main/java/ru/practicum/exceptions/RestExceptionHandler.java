@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -28,7 +29,7 @@ public class RestExceptionHandler {
         return new ApiError(HttpStatus.CONFLICT.toString(), reason, e.getMessage(), LocalDateTime.now());
     }
 
-    @ExceptionHandler({IncorrectRequestException.class, ConditionsNotMetException.class})
+    @ExceptionHandler({IncorrectRequestException.class, ValidationException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ApiError exceptionBadRequest(RuntimeException e) {
         String reason = "Incorrectly made request.";
