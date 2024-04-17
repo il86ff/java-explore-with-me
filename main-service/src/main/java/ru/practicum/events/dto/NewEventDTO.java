@@ -23,6 +23,7 @@ public class NewEventDTO {
     private Long category;
 
     @NotNull
+    @NotBlank
     @Size(min = 20, max = 7000)
     private String description;
 
