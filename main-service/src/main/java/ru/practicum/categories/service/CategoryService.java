@@ -44,7 +44,6 @@ public class CategoryService {
         return categoryMapper.categoryToCategoryDto(category);
     }
 
-    @Transactional
     public CategoryDTO update(Long catId, NewCategoryDTO categoryDto) {
 
         Category category = categoryRepository.findById(catId).orElseThrow(() -> {

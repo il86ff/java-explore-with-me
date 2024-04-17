@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDTO addUserEvent(@PathVariable Long userId,
-                                     @Valid @RequestBody NewEventDTO event) {
+                                     @RequestBody @Valid NewEventDTO event) {
 
         log.info("Calling addUserEvent: /users/{userId}/events with 'userId': {}, 'event': {}", userId, event);
         return eventService.addUserEvent(userId, event);
