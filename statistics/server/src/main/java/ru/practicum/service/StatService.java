@@ -45,7 +45,7 @@ public class StatService {
         try {
             startDT = LocalDateTime.parse(start, DTF);
             endDT = LocalDateTime.parse(end, DTF);
-            if (startDT.isEqual(endDT) || startDT.isAfter(endDT)) ResponseEntity.badRequest().build();
+            if (startDT.isEqual(endDT) || startDT.isAfter(endDT)) return ResponseEntity.badRequest().build();
         } catch (DateTimeParseException e) {
             return ResponseEntity.badRequest().build();
         }
