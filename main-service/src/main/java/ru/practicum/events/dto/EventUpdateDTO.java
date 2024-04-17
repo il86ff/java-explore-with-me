@@ -10,6 +10,7 @@ import ru.practicum.events.entity.enums.StateAction;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -34,6 +35,7 @@ public class EventUpdateDTO {
 
     private Boolean paid;
 
+    @PositiveOrZero
     private Long participantLimit;
 
     private Boolean requestModeration;
