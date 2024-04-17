@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.categories.dto.CategoryDTO;
 import ru.practicum.categories.dto.NewCategoryDTO;
 import ru.practicum.categories.entity.Category;
@@ -29,6 +30,7 @@ public class CategoryService {
     private final EventRepository eventRepository;
     private final CategoryMapper categoryMapper;
 
+    @Transactional
     public CategoryDTO add(NewCategoryDTO newCategoryDto) {
 
         Category category = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
@@ -42,6 +44,7 @@ public class CategoryService {
         return categoryMapper.categoryToCategoryDto(category);
     }
 
+    @Transactional
     public CategoryDTO update(Long catId, NewCategoryDTO categoryDto) {
 
         Category category = categoryRepository.findById(catId).orElseThrow(() -> {
@@ -59,6 +62,7 @@ public class CategoryService {
         return categoryMapper.categoryToCategoryDto(category);
     }
 
+    @Transactional(readOnly = true)
     public CategoryDTO get(Long catId) {
 
         Category category = categoryRepository.findById(catId).orElseThrow(() -> {
@@ -68,6 +72,7 @@ public class CategoryService {
         return categoryMapper.categoryToCategoryDto(category);
     }
 
+    @Transactional
     public void delete(Long catId) {
 
         if (eventRepository.existsByCategoryId(catId)) {
@@ -81,6 +86,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryDTO> getAll(Integer from, Integer size) {
 
         Sort sort = Sort.by("id").ascending();

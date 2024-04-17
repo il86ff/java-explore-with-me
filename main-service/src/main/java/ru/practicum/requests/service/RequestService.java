@@ -2,6 +2,7 @@ package ru.practicum.requests.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.events.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.events.dto.EventRequestStatusUpdateResult;
 import ru.practicum.events.entity.*;
@@ -33,6 +34,7 @@ public class RequestService {
     private final EventRepository eventRepository;
     private final RequestMapper requestMapper;
 
+    @Transactional
     public ParticipationRequestDTO addParticipationRequest(Long userId, Long eventId) {
         if (requestRepository.existsByRequesterIdAndEventId(userId, eventId)) {
             throw new RequestConflictException("Participation request with userId = " + userId
@@ -73,6 +75,7 @@ public class RequestService {
         return requestMapper.requestToDto(participationRequest);
     }
 
+    @Transactional
     public ParticipationRequestDTO cancelParticipationRequest(Long userId, Long requestId) {
         ParticipationRequest request = requestRepository.findByIdAndRequesterId(requestId, userId).orElseThrow(() -> {
             throw new ObjectNotFoundException("Participation request with id = " + requestId + " doesn't exist.");
@@ -96,6 +99,7 @@ public class RequestService {
         return requestMapper.requestToDto(request);
     }
 
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDTO> getUserRequests(Long userId) {
         List<ParticipationRequest> requests = requestRepository.findAllByRequesterId(userId);
 
@@ -108,6 +112,7 @@ public class RequestService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDTO> getUserEventRequests(Long userId, Long eventId) {
         List<ParticipationRequest> requests = requestRepository.findAllByEventIdAndEventInitiatorId(eventId, userId);
 
@@ -120,6 +125,7 @@ public class RequestService {
         }
     }
 
+    @Transactional
     public EventRequestStatusUpdateResult updateEventRequests(Long userId, Long eventId,
                                                               @Valid EventRequestStatusUpdateRequest requestsUpdate) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {

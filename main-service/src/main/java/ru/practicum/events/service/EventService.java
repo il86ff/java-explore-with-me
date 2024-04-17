@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.RequestDTO;
 import ru.practicum.RequestOutDTO;
 import ru.practicum.StatisticsClient;
@@ -51,6 +52,7 @@ public class EventService {
     private final EventMapper eventMapper;
     private final StatisticsClient statisticsClient = new StatisticsClient("http://ewm-stats-server:9090");
 
+    @Transactional(readOnly = true)
     public List<EventFullDTO> getAdminEvents(List<Long> users, List<EventState> states, List<Long> categories,
                                              LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
 
@@ -79,6 +81,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public EventFullDTO updateAdminEvent(Long eventId, EventUpdateDTO eventUpdateDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
             throw new ObjectNotFoundException("Event with id = " + eventId + " is not found.");
@@ -108,6 +111,7 @@ public class EventService {
         return eventMapper.eventToEventFullDto(event);
     }
 
+    @Transactional(readOnly = true)
     public List<EventShortDTO> getAll(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                                       LocalDateTime rangeEnd, Boolean onlyAvailable, Integer from, Integer size,
                                       EventSort sort, HttpServletRequest request) {
@@ -135,6 +139,7 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public EventFullDTO get(Long eventId, HttpServletRequest request) {
         Event event = eventRepository.findByIdAndStateIs(eventId, EventState.PUBLISHED).orElseThrow(() -> {
             throw new ObjectNotFoundException("Event with id = " + eventId + " was not found.");
@@ -145,6 +150,7 @@ public class EventService {
         return eventMapper.eventToEventFullDto(event);
     }
 
+    @Transactional(readOnly = true)
     public List<EventShortDTO> getUserEvents(Long userId, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("id").ascending());
 
@@ -153,6 +159,7 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public EventFullDTO addUserEvent(Long userId, NewEventDTO eventDto) {
         Event event = eventMapper.newEventDtoToEvent(eventDto);
 
@@ -162,6 +169,7 @@ public class EventService {
         return eventMapper.eventToEventFullDto(event);
     }
 
+    @Transactional(readOnly = true)
     public EventFullDTO getUserEventById(Long userId, Long eventId) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             throw new ObjectNotFoundException("Event with id = " + eventId + " and user id = " + userId + " is not found.");
@@ -173,6 +181,7 @@ public class EventService {
         return eventMapper.eventToEventFullDto(event);
     }
 
+    @Transactional
     public EventFullDTO updateUserEventById(Long userId, Long eventId, EventUpdateDTO eventDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             throw new ObjectNotFoundException("Event with id = " + eventId + " and user id = " + userId + " is not found.");

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilations.dto.CompilationDTO;
 import ru.practicum.compilations.dto.NewCompilationDTO;
 import ru.practicum.compilations.dto.UpdateCompilationRequest;
@@ -27,6 +28,7 @@ public class CompilationService {
     private final EventRepository eventRepository;
     private final CompilationMapper compilationMapper;
 
+    @Transactional
     public CompilationDTO add(NewCompilationDTO compilationDto) {
         Compilation compilation = compilationMapper.newCompilationDtoToCompilation(compilationDto);
 
@@ -40,6 +42,7 @@ public class CompilationService {
         return compilationMapper.compilationToCompilationDto(compilation);
     }
 
+    @Transactional
     public CompilationDTO update(Long compId, UpdateCompilationRequest compRequest) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> {
             throw new ObjectNotFoundException("Compilation with id = " + compId + " doesn't exist.");
@@ -52,6 +55,7 @@ public class CompilationService {
         return compilationMapper.compilationToCompilationDto(compilation);
     }
 
+    @Transactional(readOnly = true)
     public CompilationDTO get(Long compId) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> {
             throw new ObjectNotFoundException("Compilation with id = " + compId + " doesn't exist.");
@@ -60,6 +64,7 @@ public class CompilationService {
         return compilationMapper.compilationToCompilationDto(compilation);
     }
 
+    @Transactional(readOnly = true)
     public List<CompilationDTO> getAll(Boolean pinned, Integer from, Integer size) {
         Sort sort = Sort.by("id").ascending();
         Pageable pageable = PageRequest.of(from / size, size, sort);
@@ -73,6 +78,7 @@ public class CompilationService {
         }
     }
 
+    @Transactional
     public void delete(Long compId) {
         try {
             compilationRepository.deleteById(compId);
