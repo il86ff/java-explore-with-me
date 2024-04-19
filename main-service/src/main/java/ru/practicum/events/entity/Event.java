@@ -29,6 +29,7 @@ public class Event {
     @Size(min = 20, max = 2000)
     private String annotation;
 
+    @ToString.Exclude
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cat_id")
     private Category category;
@@ -47,10 +48,12 @@ public class Event {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
+    @ToString.Exclude
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "initiator")
     private User initiator;
 
+    @ToString.Exclude
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location")
     private Location location;
@@ -75,6 +78,7 @@ public class Event {
 
     private Long views = 0L;
 
+    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "comp_events",
