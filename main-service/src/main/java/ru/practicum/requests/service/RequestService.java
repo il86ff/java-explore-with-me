@@ -1,6 +1,7 @@
 package ru.practicum.requests.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.events.dto.EventRequestStatusUpdateRequest;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RequestService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
@@ -37,29 +39,37 @@ public class RequestService {
     @Transactional
     public ParticipationRequestDTO addParticipationRequest(Long userId, Long eventId) {
         if (requestRepository.existsByRequesterIdAndEventId(userId, eventId)) {
+            log.error("Calling addParticipationRequest data: with id {}, event id {}", userId, eventId);
             throw new RequestConflictException("Participation request with userId = " + userId
                     + " eventId = " + eventId + " already exists.");
         }
 
         User requester = userRepository.findById(userId).orElseThrow(() -> {
+            log.error("Calling addParticipationRequest data: with id {}, event id {}", userId, eventId);
             throw new ObjectNotFoundException("User with id = " + userId + " was not found.");
         });
 
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
+            log.error("Calling addParticipationRequest data: with id {}, event id {}", userId, eventId);
             throw new ObjectNotFoundException("Event with id = " + eventId + " doesn't exist.");
         });
 
         if (!event.getState().equals(EventState.PUBLISHED)) {
+            log.error("Calling addParticipationRequest data: with id {}, event id {}", userId, eventId);
             throw new RequestConflictException("Users are not allowed to register for unpublished events.");
         }
 
         if (Objects.equals(userId, event.getInitiator().getId())) {
+            log.error("Calling addParticipationRequest data: with id {}, event id {}", userId, eventId);
             throw new RequestConflictException("Event organizers are not allowed to request participation in their own events.");
         }
 
         if ((event.getParticipantLimit() != 0L) && (event.getConfirmedRequests() >= event.getParticipantLimit())) {
+            log.error("Calling addParticipationRequest data: with id {}, event id {}", userId, eventId);
             throw new RequestConflictException("Participant limit reached.");
         }
+
+        log.info("Calling addParticipationRequest data: with id {}, event id {}", userId, eventId);
 
         ParticipationRequest requestToSave = new ParticipationRequest(requester, event,
                 !event.getRequestModeration() || event.getParticipantLimit() == 0L ?
@@ -78,10 +88,12 @@ public class RequestService {
     @Transactional
     public ParticipationRequestDTO cancelParticipationRequest(Long userId, Long requestId) {
         ParticipationRequest request = requestRepository.findByIdAndRequesterId(requestId, userId).orElseThrow(() -> {
+            log.error("Calling cancelParticipationRequest data: with id {}, request id {}", userId, requestId);
             throw new ObjectNotFoundException("Participation request with id = " + requestId + " doesn't exist.");
         });
 
         if (request.getStatus() == ParticipationStatus.CONFIRMED) {
+            log.error("Calling cancelParticipationRequest data: with id {}, request id {}", userId, requestId);
             throw new RequestConflictException("Participation request with id = " + requestId + " is already confirmed.");
         }
 
@@ -89,8 +101,11 @@ public class RequestService {
 
         Long eventId = request.getEvent().getId();
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
+            log.error("Calling cancelParticipationRequest data: with id {}, request id {}", userId, requestId);
             throw new ObjectNotFoundException("Event with id = " + eventId + " doesn't exist.");
         });
+
+        log.info("Calling cancelParticipationRequest data: with id {}, request id {}", userId, requestId);
 
         event.setConfirmedRequests(event.getConfirmedRequests() - 1);
         eventRepository.save(event);
@@ -101,6 +116,9 @@ public class RequestService {
 
     @Transactional(readOnly = true)
     public List<ParticipationRequestDTO> getUserRequests(Long userId) {
+
+        log.info("Calling getUserRequests data: with id {}", userId);
+
         List<ParticipationRequest> requests = requestRepository.findAllByRequesterId(userId);
 
         if (!requests.isEmpty()) {
@@ -114,6 +132,9 @@ public class RequestService {
 
     @Transactional(readOnly = true)
     public List<ParticipationRequestDTO> getUserEventRequests(Long userId, Long eventId) {
+
+        log.info("Calling getUserEventRequests data: with id {}, event id {}", userId, eventId);
+
         List<ParticipationRequest> requests = requestRepository.findAllByEventIdAndEventInitiatorId(eventId, userId);
 
         if (!requests.isEmpty()) {
@@ -129,21 +150,25 @@ public class RequestService {
     public EventRequestStatusUpdateResult updateEventRequests(Long userId, Long eventId,
                                                               @Valid EventRequestStatusUpdateRequest requestsUpdate) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
+            log.error("Calling updateEventRequests data: with id {}, event id {}", userId, eventId);
             throw new ObjectNotFoundException("Event with id = " + eventId + " and user id = " + userId + " doesn't exist.");
         });
 
         if (!event.getInitiator().getId().equals(userId)) {
+            log.error("Calling updateEventRequests data: with id {}, event id {}", userId, eventId);
             throw new RequestConflictException("Access denied. User with id = " + userId + " is not an event initiator.");
         }
 
         List<ParticipationRequest> participationRequests = requestRepository.findAllByIdInAndAndEventId(requestsUpdate.getRequestIds(), eventId);
 
         if (participationRequests.size() != requestsUpdate.getRequestIds().size()) {
+            log.error("Calling updateEventRequests data: with id {}, event id {}", userId, eventId);
             throw new ObjectNotFoundException("Incorrect request id(s) received in the request body.");
         }
 
         for (ParticipationRequest request : participationRequests) {
             if (!request.getStatus().equals(ParticipationStatus.PENDING)) {
+                log.error("Calling updateEventRequests data: with id {}, event id {}", userId, eventId);
                 throw new RequestConflictException("Only requests with status 'Pending' can be accepted or rejected.");
             }
         }
@@ -168,6 +193,7 @@ public class RequestService {
         }
 
         if (event.getConfirmedRequests() >= event.getParticipantLimit()) {
+            log.error("Calling updateEventRequests data: with id {}, event id {}", userId, eventId);
             throw new RequestConflictException("Failed to accept request. Reached max participant limit for event id = " + eventId + ".");
         }
 
@@ -188,6 +214,7 @@ public class RequestService {
             eventRepository.save(event);
         }
 
+        log.info("Calling updateEventRequests data: with id {}, event id {}", userId, eventId);
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
     }
 }

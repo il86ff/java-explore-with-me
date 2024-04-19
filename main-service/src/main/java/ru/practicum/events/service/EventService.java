@@ -1,6 +1,7 @@
 package ru.practicum.events.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +44,7 @@ import static ru.practicum.events.repository.EventSpecRepository.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EventService {
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final EventRepository eventRepository;
@@ -56,6 +58,7 @@ public class EventService {
     public List<EventFullDTO> getAdminEvents(List<Long> users, List<EventState> states, List<Long> categories,
                                              LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
 
+        log.info("Calling getAdminEvents data: for users id {}, states {}, categories {}", users, states, categories);
         if ((rangeStart != null && rangeEnd != null) && (rangeStart.isAfter(rangeEnd) || rangeStart.isEqual(rangeEnd))) {
             throw new IncorrectRequestException("Start time must not after or equal to end time.");
         }
@@ -84,8 +87,11 @@ public class EventService {
     @Transactional
     public EventFullDTO updateAdminEvent(Long eventId, EventUpdateDTO eventUpdateDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
+            log.error("Calling updateAdminEvent data: with object {}", eventUpdateDto);
             throw new ObjectNotFoundException("Event with id = " + eventId + " is not found.");
         });
+
+        log.info("Calling updateAdminEvent data: with object {}", eventUpdateDto);
 
         updateEvent(event, eventUpdateDto);
 
@@ -117,6 +123,7 @@ public class EventService {
                                       EventSort sort, HttpServletRequest request) {
 
         if ((rangeStart != null && rangeEnd != null) && (rangeStart.isAfter(rangeEnd) || rangeStart.isEqual(rangeEnd))) {
+            log.error("Calling getAll data: with text {}, categories {}, paid {}", text, categories, paid);
             throw new IncorrectRequestException("Start time must not after or equal to end time.");
         }
 
@@ -142,9 +149,11 @@ public class EventService {
     @Transactional
     public EventFullDTO get(Long eventId, HttpServletRequest request) {
         Event event = eventRepository.findByIdAndStateIs(eventId, EventState.PUBLISHED).orElseThrow(() -> {
+            log.error("Calling get data: with id {}", eventId);
             throw new ObjectNotFoundException("Event with id = " + eventId + " was not found.");
         });
 
+        log.info("Calling get data: with id {}", eventId);
         updateViews(Collections.singletonList(event), request);
 
         return eventMapper.eventToEventFullDto(event);
@@ -152,6 +161,7 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public List<EventShortDTO> getUserEvents(Long userId, Integer from, Integer size) {
+        log.info("Calling getUserEvents data: with id {}", userId);
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("id").ascending());
 
         return eventRepository.findAllByInitiatorId(userId, pageable).stream()
@@ -161,6 +171,7 @@ public class EventService {
 
     @Transactional
     public EventFullDTO addUserEvent(Long userId, NewEventDTO eventDto) {
+        log.info("Calling addUserEvent data: with id {}", userId);
         Event event = eventMapper.newEventDtoToEvent(eventDto);
 
         updateEvent(event, userId, eventDto);
@@ -172,8 +183,11 @@ public class EventService {
     @Transactional(readOnly = true)
     public EventFullDTO getUserEventById(Long userId, Long eventId) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
+            log.error("Calling getUserEventById data: with id {}", userId);
             throw new ObjectNotFoundException("Event with id = " + eventId + " and user id = " + userId + " is not found.");
         });
+
+        log.info("Calling getUserEventById data: with id {}", userId);
 
         event.setViews(event.getViews() + 1);
 
@@ -184,13 +198,16 @@ public class EventService {
     @Transactional
     public EventFullDTO updateUserEventById(Long userId, Long eventId, EventUpdateDTO eventDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
+            log.error("Calling updateUserEventById data: with id {}, object {}", userId, eventDto);
             throw new ObjectNotFoundException("Event with id = " + eventId + " and user id = " + userId + " is not found.");
         });
 
         if (event.getState().equals(EventState.PUBLISHED)) {
+            log.error("Calling updateUserEventById data: with id {}, object {}", userId, eventDto);
             throw new RequestConflictException("Event must not be published.");
         }
 
+        log.info("Calling updateUserEventById data: with id {}, object {}", userId, eventDto);
         updateEvent(event, eventDto);
 
         if (eventDto.getStateAction() != null) {

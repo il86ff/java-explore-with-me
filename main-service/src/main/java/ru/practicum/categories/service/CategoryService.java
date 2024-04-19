@@ -1,6 +1,7 @@
 package ru.practicum.categories.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -37,7 +39,9 @@ public class CategoryService {
 
         try {
             category = categoryRepository.save(category);
+            log.info("Calling add: with object {}", newCategoryDto);
         } catch (DataIntegrityViolationException e) {
+            log.error("Calling add: with object {}", newCategoryDto);
             throw new SQLConstraintViolationException("Category with name = " + newCategoryDto.getName() + " already exists.");
         }
 
@@ -54,7 +58,9 @@ public class CategoryService {
 
         try {
             category = categoryRepository.save(category);
+            log.info("Calling update: with object {}", categoryDto);
         } catch (DataIntegrityViolationException e) {
+            log.error("Calling update: with object {}", categoryDto);
             throw new SQLConstraintViolationException("Category with name = " + categoryDto.getName() + " already exists.");
         }
 
@@ -64,7 +70,9 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryDTO get(Long catId) {
 
+        log.info("Calling get data: with id {}", catId);
         Category category = categoryRepository.findById(catId).orElseThrow(() -> {
+            log.error("Calling get data: with id {}", catId);
             throw new ObjectNotFoundException("Category with id = " + catId + " doesn't exist.");
         });
 
@@ -80,6 +88,7 @@ public class CategoryService {
 
         try {
             categoryRepository.deleteById(catId);
+            log.info("Calling delete data: with id {}", catId);
         } catch (EmptyResultDataAccessException e) {
             throw new ObjectNotFoundException("Category with id = " + catId + " doesn't exist.");
         }
@@ -88,6 +97,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAll(Integer from, Integer size) {
 
+        log.info("Calling get all data: with from {}, size {}", from, size);
         Sort sort = Sort.by("id").ascending();
         Pageable pageable = PageRequest.of(from / size, size, sort);
 
