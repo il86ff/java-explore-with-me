@@ -1976,8 +1976,8 @@
                   "});\r",
                   "\r",
                   "pm.test(\"Request data must be equal to response data\", function () {\r",
-                  "    pm.expect(target[0].user.id).equal(137, 'User id in request and response must be equal');\r",
-                  "    pm.expect(target[1].user.id).equal(137, 'User id in request and response must be equal');\r",
+                  "    pm.expect(target[0].user.id).equal(139, 'User id in request and response must be equal');\r",
+                  "    pm.expect(target[1].user.id).equal(139, 'User id in request and response must be equal');\r",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -2414,7 +2414,7 @@
           "response": []
         },
         {
-          "name": "Comment 2 by User 139 for Event 110",
+          "name": "Comment 2 by User 139 for Event 109",
           "event": [
             {
               "listen": "test",
@@ -2462,7 +2462,7 @@
                 },
                 {
                   "key": "eventId",
-                  "value": "110"
+                  "value": "109"
                 },
                 {
                   "key": "commentId",
