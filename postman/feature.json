@@ -1,16 +1,17 @@
+
 {
   "info": {
     "_postman_id": "37cb9186-e257-46d4-a1f6-aed12a8f26be",
     "name": "Comments",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-    "_exporter_id": "29565418"
+    "_exporter_id": "28287691"
   },
   "item": [
     {
       "name": "Users",
       "item": [
         {
-          "name": "User 136 create",
+          "name": "User 138 create",
           "event": [
             {
               "listen": "test",
@@ -25,17 +26,17 @@
                   "pm.test(\"Test user 'id' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('id');",
-                  "    pm.expect(jsonData.id, '\"id\" must be 136').to.eql(136);",
+                  "    pm.expect(jsonData.id, '\"id\" must be 138').to.eql(138);",
                   "});",
                   "pm.test(\"Test user 'email' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('email');",
-                  "    pm.expect(jsonData.email, '\"email\" must be \"user136@user.com\"').to.eql('user136@user.com');",
+                  "    pm.expect(jsonData.email, '\"email\" must be \"user136@user.com\"').to.eql('user138@user.com');",
                   "});",
                   "pm.test(\"Test user 'name' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('name');",
-                  "    pm.expect(jsonData.name, '\"name\" must be \"user136\"').to.eql('user136');",
+                  "    pm.expect(jsonData.name, '\"name\" must be \"user138\"').to.eql('user138');",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -65,7 +66,7 @@
           "response": []
         },
         {
-          "name": "User 137 create",
+          "name": "User 139 create",
           "event": [
             {
               "listen": "test",
@@ -79,17 +80,17 @@
                   "pm.test(\"Test user 'id' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('id');",
-                  "    pm.expect(jsonData.id, '\"id\" must be 137').to.eql(137);",
+                  "    pm.expect(jsonData.id, '\"id\" must be 139').to.eql(139);",
                   "});",
                   "pm.test(\"Test user 'email' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('email');",
-                  "    pm.expect(jsonData.email, '\"email\" must be \"user137@user.com\"').to.eql('user137@user.com');",
+                  "    pm.expect(jsonData.email, '\"email\" must be \"user137@user.com\"').to.eql('user139@user.com');",
                   "});",
                   "pm.test(\"Test user 'name' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('name');",
-                  "    pm.expect(jsonData.name, '\"name\" must be \"user137\"').to.eql('user137');",
+                  "    pm.expect(jsonData.name, '\"name\" must be \"user139\"').to.eql('user139');",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -112,14 +113,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"user137\",\n    \"email\": \"user137@user.com\"\n}"
+              "raw": "{\n    \"name\": \"user137\",\n    \"email\": \"user139@user.com\"\n}"
             },
             "url": "{{baseUrl}}/admin/users"
           },
           "response": []
         },
         {
-          "name": "User 138 create",
+          "name": "User 140 create",
           "event": [
             {
               "listen": "test",
@@ -133,17 +134,17 @@
                   "pm.test(\"Test user 'id' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('id');",
-                  "    pm.expect(jsonData.id, '\"id\" must be 138').to.eql(138);",
+                  "    pm.expect(jsonData.id, '\"id\" must be 140').to.eql(140);",
                   "});",
                   "pm.test(\"Test user 'email' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('email');",
-                  "    pm.expect(jsonData.email, '\"email\" must be \"user138@user.com\"').to.eql('user138@user.com');",
+                  "    pm.expect(jsonData.email, '\"email\" must be \"user138@user.com\"').to.eql('user140@user.com');",
                   "});",
                   "pm.test(\"Test user 'name' field\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.have.property('name');",
-                  "    pm.expect(jsonData.name, '\"name\" must be \"user138\"').to.eql('user138');",
+                  "    pm.expect(jsonData.name, '\"name\" must be \"user140\"').to.eql('user140');",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -166,7 +167,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"user138\",\n    \"email\": \"user138@user.com\"\n}"
+              "raw": "{\n    \"name\": \"user140\",\n    \"email\": \"user140@user.com\"\n}"
             },
             "url": "{{baseUrl}}/admin/users"
           },
