@@ -1751,7 +1751,7 @@
           "response": []
         },
         {
-          "name": "User 139 Event 110 Сomment 5",
+          "name": "User 139 Event 109 Сomment 5",
           "event": [
             {
               "listen": "test",
@@ -1822,7 +1822,7 @@
                 },
                 {
                   "key": "eventId",
-                  "value": "110"
+                  "value": "109"
                 }
               ]
             }
@@ -1830,7 +1830,7 @@
           "response": []
         },
         {
-          "name": "Comment 5 Pending by User 139 for Event 110",
+          "name": "Comment 5 Pending by User 139 for Event 109",
           "event": [
             {
               "listen": "test",
@@ -1878,7 +1878,7 @@
                 },
                 {
                   "key": "eventId",
-                  "value": "110"
+                  "value": "109"
                 },
                 {
                   "key": "commentId",
