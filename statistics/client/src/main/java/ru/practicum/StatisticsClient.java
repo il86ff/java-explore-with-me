@@ -41,4 +41,28 @@ public class StatisticsClient {
                 .bodyToMono(new ParameterizedTypeReference<ResponseEntity<List<RequestOutDTO>>>() {})
                 .block();
     }
+
+    public ResponseEntity<List<RequestOutDTO>> getStatsByIp(String start,
+                                                            String end,
+                                                            List<String> uris,
+                                                            Boolean unique,
+                                                            String ip) {
+
+        ResponseEntity<List<RequestOutDTO>> listResponseEntity = webClient.get()
+                .uri(uriBuilder -> {
+                    uriBuilder.path("/statsByIp")
+                            .queryParam("start", start)
+                            .queryParam("end", end)
+                            .queryParam("ip", ip);
+                    if (uris != null)
+                        uriBuilder.queryParam("uris", String.join(",", uris));
+                    if (unique != null)
+                        uriBuilder.queryParam("unique", unique);
+                    return uriBuilder.build();
+                })
+                .retrieve()
+                .toEntityList(RequestOutDTO.class)
+                .block();
+        return listResponseEntity;
+    }
 }
