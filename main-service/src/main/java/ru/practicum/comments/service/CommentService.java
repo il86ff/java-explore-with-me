@@ -44,6 +44,7 @@ public class CommentService {
     private final CommentSpecialRepository commentSpecialRepository;
     private final CommentMapper commentMapper;
 
+    @Transactional
     public CommentDTO addUserComment(Long userId, Long eventId, NewCommentDTO newCommentDto) {
 
         User commenter = userRepository.findById(userId).orElseThrow(() -> {
@@ -73,6 +74,7 @@ public class CommentService {
         return commentMapper.commentToCommentDto(comment);
     }
 
+    @Transactional
     public CommentDTO updateUserComment(Long userId, Long eventId, Long commentId, NewCommentDTO newCommentDto) {
         Comment comment = commentRepository.findByIdAndUserIdAndEventId(commentId, userId, eventId).orElseThrow(() -> {
             log.error("Calling updateUserComment: with object {}", newCommentDto);
@@ -95,6 +97,7 @@ public class CommentService {
         return commentMapper.commentToCommentDto(comment);
     }
 
+    @Transactional(readOnly = true)
     public CommentDTO getUserEventComment(Long userId, Long eventId, Long commentId) {
         Comment comment = commentRepository.findByIdAndUserIdAndEventId(commentId, userId, eventId).orElseThrow(() -> {
             log.error("Calling getUserEventComment: with userID {}, eventID {}, commentID {}", userId, eventId, commentId);
@@ -111,6 +114,7 @@ public class CommentService {
         return commentMapper.commentToCommentDto(comment);
     }
 
+    @Transactional(readOnly = true)
     public List<CommentDTO> getAllUserComments(Long userId) {
         List<Comment> comments = commentRepository.findAllByUserIdAndStatus(userId, CommentStatus.PUBLISHED);
 
@@ -124,6 +128,7 @@ public class CommentService {
         return new ArrayList<>();
     }
 
+    @Transactional(readOnly = true)
     public List<CommentDTO> getAllUserEventComments(Long userId, Long eventId) {
         List<Comment> comments = commentRepository.findAllByUserIdAndEventIdAndStatus(userId, eventId, CommentStatus.PUBLISHED);
 
@@ -149,6 +154,7 @@ public class CommentService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<CommentDTO> getAdminComments(String text, List<Long> users, List<CommentStatus> statuses, List<Long> events,
                                              LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                              Integer from, Integer size) {
@@ -173,6 +179,7 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<CommentDTO> moderateAdminComments(CommentStatusUpdateRequest updateRequest) {
         List<Comment> comments = commentRepository.findAllByIdInAndStatus(updateRequest.getCommentIds(), CommentStatus.PENDING);
 
