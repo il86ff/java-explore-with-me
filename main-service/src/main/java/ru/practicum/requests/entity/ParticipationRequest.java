@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class ParticipationRequest {
 
     @Id
